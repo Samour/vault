@@ -6,7 +6,6 @@ import java.time.Instant
 data class ApplicationAuthKey(
     val id: String,
     val applicationId: String,
-    val issuerId: String,
     val validFrom: Instant,
     val validTo: Instant?,
     val key: EncryptedValue,

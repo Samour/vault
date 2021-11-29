@@ -1,6 +1,5 @@
 package me.aburke.vault.core.application
 
-import me.aburke.vault.core.exceptions.InvalidRequestException
 import me.aburke.vault.core.exceptions.NotFoundException
 import org.springframework.stereotype.Service
 import java.util.*
@@ -17,15 +16,10 @@ class ApplicationService(val applicationStore: ApplicationStore) {
     }
 
     fun createApplication(create: CreateApplication): Application {
-        if (create.tags.find { it.key == TagNames.name } == null) {
-            throw InvalidRequestException("\"${TagNames.name}\" is a required tag");
-        }
-
         val application = Application(
             id = UUID.randomUUID().toString(),
             tags = create.tags,
-            issuer = false,
-            isserName = null,
+            issuerIds = emptyList(),
         )
         applicationStore.insert(application)
 
@@ -33,20 +27,38 @@ class ApplicationService(val applicationStore: ApplicationStore) {
     }
 
     fun updateTags(applicationId: String, tags: List<ApplicationTag>) {
-        val application = applicationStore.findById(applicationId) ?: throw NotFoundException("Application not found")
-        val updatedTagNames = tags.map { it.key }
-            .toSet()
-        val updatedTags = application.tags
-            .filter { !updatedTagNames.contains(it.key) } + tags
-        applicationStore.setTags(applicationId, updatedTags)
+        withApplication(applicationId) { application ->
+            val updatedTagNames = tags.map { it.key }
+                .toSet()
+            val updatedTags = application.tags
+                .filter { !updatedTagNames.contains(it.key) } + tags
+            applicationStore.setTags(applicationId, updatedTags)
+        }
     }
 
     fun removeTags(applicationId: String, tagKeys: List<String>) {
-        if (tagKeys.find { it == TagNames.name } != null) {
-            throw InvalidRequestException("Tag \"${TagNames.name}\" may not be removed")
+        withApplication(applicationId) { application ->
+            val tags = application.tags.filter { !tagKeys.contains(it.key) }
+            applicationStore.setTags(applicationId, tags)
         }
+    }
+
+    fun addIssuers(applicationId: String, issuerIds: List<String>) {
+        withApplication(applicationId) { application ->
+            val updatedIssuers = application.issuerIds.toSet() + issuerIds.toSet()
+            applicationStore.setIssuerIds(applicationId, updatedIssuers.toList())
+        }
+    }
+
+    fun removeIssuers(applicationId: String, issuerIds: List<String>) {
+        withApplication(applicationId) { application ->
+            val updatedIssuers = application.issuerIds.filter { !issuerIds.contains(it) }
+            applicationStore.setIssuerIds(applicationId, updatedIssuers)
+        }
+    }
+
+    private inline fun withApplication(applicationId: String, action: (application: Application) -> Unit) {
         val application = applicationStore.findById(applicationId) ?: throw NotFoundException("Application not found")
-        val tags = application.tags.filter { !tagKeys.contains(it.key) }
-        applicationStore.setTags(applicationId, tags)
+        action(application)
     }
 }

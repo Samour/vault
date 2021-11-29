@@ -9,4 +9,6 @@ interface ApplicationStore {
     fun insert(application: Application)
 
     fun setTags(applicationId: String, tags: List<ApplicationTag>)
+
+    fun setIssuerIds(applicationId: String, issuerIds: List<String>)
 }
