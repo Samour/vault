@@ -1,2 +1,5 @@
 rootProject.name = "vault"
-include(":core")
+include(
+    ":core",
+    ":facade"
+)
