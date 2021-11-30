@@ -12,6 +12,12 @@ class ApplicationAuthKeyMapStore : AbstractMapStore<ApplicationAuthKey>(), Appli
         entries.values
             .filter { it.applicationId == applicationId }
 
+    override fun findAllByFirst8(keyFirst8: String, validTime: Instant): List<ApplicationAuthKey> =
+        entries.values
+            .filter { it.keyFirst8 == keyFirst8 }
+            .filter { !it.validFrom.isAfter(validTime) }
+            .filter { it.validTo?.isBefore(validTime) ?: true }
+
     override fun insert(applicationAuthKey: ApplicationAuthKey) {
         entries[applicationAuthKey.id] = applicationAuthKey
     }
@@ -23,6 +29,7 @@ class ApplicationAuthKeyMapStore : AbstractMapStore<ApplicationAuthKey>(), Appli
                 applicationId = entry.id,
                 validFrom = validFrom,
                 validTo = entry.validTo,
+                keyFirst8 = entry.keyFirst8,
                 encodedKey = entry.encodedKey
             )
         }
@@ -35,6 +42,7 @@ class ApplicationAuthKeyMapStore : AbstractMapStore<ApplicationAuthKey>(), Appli
                 applicationId = entry.id,
                 validFrom = entry.validFrom,
                 validTo = validTo,
+                keyFirst8 = entry.keyFirst8,
                 encodedKey = entry.encodedKey
             )
         }

@@ -27,6 +27,8 @@ class IssuerService(
 
     fun listIssuers(): List<Issuer> = issuerStore.getAllIssuers()
 
+    fun findIssuersByIds(ids: List<String>): List<Issuer> = issuerStore.findAllByIds(ids)
+
     fun getIssuerByName(name: String): Issuer? = issuerStore.findIssuerByName(name)
 
     fun createIssuer(name: String): Issuer {

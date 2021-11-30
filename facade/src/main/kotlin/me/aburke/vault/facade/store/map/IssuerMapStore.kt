@@ -7,6 +7,10 @@ class IssuerMapStore : AbstractMapStore<Issuer>(), IssuerStore {
 
     override fun getAllIssuers(): List<Issuer> = entries.values.toList()
 
+    override fun findAllByIds(ids: List<String>): List<Issuer> =
+        ids.map { entries[it] }
+            .filterNotNull()
+
     override fun findIssuerByName(name: String): Issuer? = entries.values.find { it.name == name }
 
     override fun insert(issuer: Issuer) {

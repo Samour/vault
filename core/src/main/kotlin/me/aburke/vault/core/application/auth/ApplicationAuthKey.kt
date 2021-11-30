@@ -7,5 +7,6 @@ data class ApplicationAuthKey(
     val applicationId: String,
     val validFrom: Instant,
     val validTo: Instant?,
+    val keyFirst8: String,
     val encodedKey: String,
 )

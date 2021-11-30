@@ -8,6 +8,8 @@ interface ApplicationAuthKeyStore {
 
     fun findAllByApplicationId(applicationId: String): List<ApplicationAuthKey>
 
+    fun findAllByFirst8(keyFirst8: String, validTime: Instant): List<ApplicationAuthKey>
+
     fun insert(applicationAuthKey: ApplicationAuthKey)
 
     fun updateValidFrom(authKeyId: String, validFrom: Instant)

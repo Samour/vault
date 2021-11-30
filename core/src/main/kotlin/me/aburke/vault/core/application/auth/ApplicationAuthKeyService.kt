@@ -20,6 +20,9 @@ class ApplicationAuthKeyService(
 
     fun getKey(keyId: String): ApplicationAuthKey? = applicationAuthKeyStore.findById(keyId)
 
+    fun getKeysByFirst8(keyFirst8: String, validTime: Instant): List<ApplicationAuthKey> =
+        applicationAuthKeyStore.findAllByFirst8(keyFirst8.take(8), validTime)
+
     fun createAuthKey(applicationId: String, createKey: CreateAuthKey): DecodedApplicationAuthKey {
         val key = keyGenerationService.createRandomString(keyLength)
         val authKey = ApplicationAuthKey(
@@ -27,6 +30,7 @@ class ApplicationAuthKeyService(
             applicationId = applicationId,
             validFrom = createKey.validFrom,
             validTo = createKey.validTo,
+            keyFirst8 = key.take(8),
             encodedKey = authKeyEncoder.encode(key),
         )
         applicationAuthKeyStore.insert(authKey)
