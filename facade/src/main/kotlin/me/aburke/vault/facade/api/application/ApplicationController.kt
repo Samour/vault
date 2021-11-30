@@ -8,6 +8,7 @@ import me.aburke.vault.core.application.auth.CreateAuthKey
 import me.aburke.vault.core.exceptions.DataError
 import me.aburke.vault.core.exceptions.NotFoundException
 import me.aburke.vault.facade.api.application.dto.*
+import me.aburke.vault.facade.api.dto.ListResponse
 import me.aburke.vault.facade.converters.toDto
 import org.springframework.web.bind.annotation.*
 

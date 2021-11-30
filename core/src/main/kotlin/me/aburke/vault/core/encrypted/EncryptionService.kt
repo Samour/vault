@@ -13,7 +13,7 @@ class EncryptionService(private val encryptionSecretKey: SecretKey) {
         private const val algorithm = "AES/CBC/PKCS5Padding"
     }
 
-    fun encryptValue(value: String): EncryptedValue {
+    fun encryptValue(value: ByteArray): EncryptedValue {
         val iv = ByteArray(16)
         SecureRandom().nextBytes(iv)
         val ivSpec = IvParameterSpec(iv)
@@ -21,15 +21,15 @@ class EncryptionService(private val encryptionSecretKey: SecretKey) {
         cipher.init(Cipher.ENCRYPT_MODE, encryptionSecretKey, ivSpec)
 
         return EncryptedValue(
-            value = cipher.doFinal(value.toByteArray()),
+            value = cipher.doFinal(value),
             iv = iv,
         )
     }
 
-    fun decryptValue(value: EncryptedValue): String {
+    fun decryptValue(value: EncryptedValue): ByteArray {
         val ivSpec = IvParameterSpec(value.iv)
         val cipher = Cipher.getInstance(algorithm)
         cipher.init(Cipher.DECRYPT_MODE, encryptionSecretKey, ivSpec)
-        return cipher.doFinal(value.value).decodeToString()
+        return cipher.doFinal(value.value)
     }
 }

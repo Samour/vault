@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class ApplicationService(val applicationStore: ApplicationStore) {
+class ApplicationService(private val applicationStore: ApplicationStore) {
 
     fun listApplications(): List<Application> {
         return applicationStore.getAllApplications()
