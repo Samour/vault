@@ -2,10 +2,7 @@ package me.aburke.vault.core.application.auth
 
 import java.time.Instant
 
-data class ApplicationAuthKey(
-    val id: String,
-    val applicationId: String,
+data class CreateAuthKey(
     val validFrom: Instant,
     val validTo: Instant?,
-    val encodedKey: String,
 )
