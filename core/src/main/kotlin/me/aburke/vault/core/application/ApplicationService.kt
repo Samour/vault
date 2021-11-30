@@ -19,7 +19,7 @@ class ApplicationService(private val applicationStore: ApplicationStore) {
         val application = Application(
             id = UUID.randomUUID().toString(),
             tags = create.tags,
-            issuerIds = emptyList(),
+            issuerIds = create.issuerIds,
         )
         applicationStore.insert(application)
 

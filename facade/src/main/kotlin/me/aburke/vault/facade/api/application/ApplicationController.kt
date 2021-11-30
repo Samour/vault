@@ -29,7 +29,10 @@ class ApplicationController(
     @PostMapping
     fun createApplication(@RequestBody createRequest: CreateApplicationRequest): ApplicationDto {
         return applicationService.createApplication(
-            CreateApplication(tags = createRequest.tags)
+            CreateApplication(
+                tags = createRequest.tags,
+                issuerIds = createRequest.issuerIds,
+            )
         ).toDto()
     }
 
