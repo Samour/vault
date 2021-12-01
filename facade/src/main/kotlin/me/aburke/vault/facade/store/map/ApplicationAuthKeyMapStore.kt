@@ -24,27 +24,13 @@ class ApplicationAuthKeyMapStore : AbstractMapStore<ApplicationAuthKey>(), Appli
 
     override fun updateValidFrom(authKeyId: String, validFrom: Instant) {
         updateEntry(authKeyId) { entry ->
-            entries[entry.id] = ApplicationAuthKey(
-                id = entry.id,
-                applicationId = entry.id,
-                validFrom = validFrom,
-                validTo = entry.validTo,
-                keyFirst8 = entry.keyFirst8,
-                encodedKey = entry.encodedKey
-            )
+            entries[entry.id] = entry.copy(validFrom = validFrom)
         }
     }
 
     override fun updateValidTo(authKeyId: String, validTo: Instant?) {
         updateEntry(authKeyId) { entry ->
-            entries[entry.id] = ApplicationAuthKey(
-                id = entry.id,
-                applicationId = entry.id,
-                validFrom = entry.validFrom,
-                validTo = validTo,
-                keyFirst8 = entry.keyFirst8,
-                encodedKey = entry.encodedKey
-            )
+            entries[entry.id] = entry.copy(validTo = validTo)
         }
     }
 }

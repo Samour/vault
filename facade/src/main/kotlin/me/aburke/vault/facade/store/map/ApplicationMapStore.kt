@@ -16,21 +16,13 @@ class ApplicationMapStore : AbstractMapStore<Application>(), ApplicationStore {
 
     override fun setTags(applicationId: String, tags: List<ApplicationTag>) {
         updateEntry(applicationId) { entry ->
-            entries[applicationId] = Application(
-                id = entry.id,
-                tags = tags,
-                issuerIds = entry.issuerIds
-            )
+            entries[applicationId] = entry.copy(tags = tags)
         }
     }
 
     override fun setIssuerIds(applicationId: String, issuerIds: List<String>) {
         updateEntry(applicationId) { entry ->
-            entries[applicationId] = Application(
-                id = entry.id,
-                tags = entry.tags,
-                issuerIds = issuerIds
-            )
+            entries[applicationId] = entry.copy(issuerIds = issuerIds)
         }
     }
 }

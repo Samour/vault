@@ -1,8 +1,10 @@
 package me.aburke.vault.facade.config
 
+import me.aburke.vault.core.acl.AclStore
 import me.aburke.vault.core.application.ApplicationStore
 import me.aburke.vault.core.application.auth.ApplicationAuthKeyStore
 import me.aburke.vault.core.issuer.IssuerStore
+import me.aburke.vault.facade.store.map.AclMapStore
 import me.aburke.vault.facade.store.map.ApplicationAuthKeyMapStore
 import me.aburke.vault.facade.store.map.ApplicationMapStore
 import me.aburke.vault.facade.store.map.IssuerMapStore
@@ -20,4 +22,7 @@ class MapStoreBeans {
 
     @Bean
     fun issuerStore(): IssuerStore = IssuerMapStore()
+
+    @Bean
+    fun aclStore(): AclStore = AclMapStore()
 }
